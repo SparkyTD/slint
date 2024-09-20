@@ -109,24 +109,18 @@ pub fn compile_paths(
                         ),
                     };
 
-                    if child.borrow().repeated.is_some() {
-                        diag.push_error(
-                            "Path elements are not supported with `for`-`in` syntax, yet (https://github.com/slint-ui/slint/issues/754)".into(),
-                            &*child.borrow(),
-                        );
-                    } else {
-                        let mut bindings = std::collections::BTreeMap::new();
-                        {
-                            let mut child = child.borrow_mut();
-                            for k in element_type.properties.keys() {
-                                if let Some(binding) = child.bindings.remove(k) {
-                                    bindings.insert(k.clone(), binding);
-                                }
+                    let mut bindings = std::collections::BTreeMap::new();
+                    let repeated = child.borrow().repeated.clone();
+                    {
+                        let mut child = child.borrow_mut();
+                        for k in element_type.properties.keys() {
+                            if let Some(binding) = child.bindings.remove(k) {
+                                bindings.insert(k.clone(), binding);
                             }
                         }
-                        path_data.push(PathElement { element_type, bindings });
-                        enclosing_component.optimized_elements.borrow_mut().push(child);
                     }
+                    path_data.push(PathElement { element_type, bindings, repeated: repeated.and_then(move |t| Some(t.model)) });
+                    enclosing_component.optimized_elements.borrow_mut().push(child);
                 } else {
                     elem.children.push(child);
                 }

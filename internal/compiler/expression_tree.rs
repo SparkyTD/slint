@@ -1611,6 +1611,7 @@ pub enum Path {
 pub struct PathElement {
     pub element_type: Rc<BuiltinElement>,
     pub bindings: BindingsMap,
+    pub repeated: Option<Expression>
 }
 
 #[derive(Clone, Debug, Default)]

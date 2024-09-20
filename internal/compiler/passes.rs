@@ -190,7 +190,9 @@ pub async fn run_passes(
         if !type_loader.compiler_config.debug_info {
             optimize_useless_rectangles::optimize_useless_rectangles(component);
         }
+        println!(">>>>> [BEFORE] >>>>> {:?}\n<<<<<<<<<<<<<<<<<<<<", component);
         move_declarations::move_declarations(component);
+        println!(">>>>> [AFTER] >>>>> {:?}\n<<<<<<<<<<<<<<<<<<<<", component);
     });
 
     remove_aliases::remove_aliases(doc, diag);

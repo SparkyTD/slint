@@ -743,6 +743,7 @@ impl Snapshotter {
                                         )
                                     })
                                     .collect(),
+                                repeated: p.repeated.clone()
                             }
                         })
                         .collect(),
